@@ -1,0 +1,42 @@
+<app-default-auth-layout>
+  <app-auth-title title="Criar Conta" />
+
+  <app-alert *ngIf="mensagemErro" [mensagem]="mensagemErro" tipo="danger" />
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <app-input-field
+      label="Name"
+      name="name"
+      type="text"
+      [control]="form.controls.name"
+      errorMessage="Informe seu nome!"
+    />
+
+    <app-input-field
+      label="E-mail"
+      name="email"
+      type="email"
+      [control]="form.controls.email"
+      errorMessage="E-mail inválido"
+    />
+
+    <app-input-field
+      label="Senha"
+      name="senha"
+      type="password"
+      [control]="form.controls.senha"
+      errorMessage="Senha obrigatória (mínimo 6 caracteres)"
+    />
+
+    <div class="d-grid gap-2">
+      <app-button label="Cadastar" variant="success" type="submit"></app-button>
+    </div>
+
+    <div class="mt-2">
+      <p>
+        Já tem uma conta?
+        <a routerLink="/login" class="link-offset-1">Login</a>
+      </p>
+    </div>
+  </form>
+</app-default-auth-layout>

@@ -1,0 +1,63 @@
+<div class="d-flex">
+  <div class="flex-grow-1 p-4">
+    <ng-container *ngIf="cards.length > 0; else noCards">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" *ngFor="let card of cards">
+          <app-card-indicators
+            [title]="card.title"
+            [icon]="card.icon"
+            [bgClass]="card.bgClass"
+            [value]="card.value"
+            [footer]="card.footer"
+          ></app-card-indicators>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noCards>
+      <app-empty-state
+        mode="card"
+        icon="bi bi-clipboard-x fs-1 text-secondary mb-3"
+        title="Nenhum dado de indicador disponível"
+        message="Cadastre novos contatos para visualizar os indicadores."
+      ></app-empty-state>
+    </ng-template>
+
+    <ng-container *ngIf="charts.length > 0; else noCharts">
+      <div class="row g-4 mt-4">
+        <div class="col-md-6" *ngFor="let chart of charts">
+          <app-chart-card
+            [title]="chart.title"
+            [data]="chart.data"
+            [options]="chart.options"
+            [type]="chart.type"
+          ></app-chart-card>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noCharts>
+      <app-empty-state
+        mode="card"
+        icon="bi bi-pie-chart fs-1 text-secondary mb-3"
+        title="Nenhum gráfico disponível"
+        message="Os dados gráficos serão exibidos assim que houver contatos
+          suficientes."
+      ></app-empty-state>
+    </ng-template>
+
+    <ng-container *ngIf="ultimosContatos.length > 0; else noContatos">
+      <app-table
+        [titulo]="'Últimos contatos adicionados'"
+        [contatos]="ultimosContatos"
+        [exibirAcoes]="false"
+      ></app-table>
+    </ng-container>
+    <ng-template #noContatos>
+      <app-empty-state
+        mode="card"
+        icon="bi bi-person-x fs-1 text-secondary mb-3"
+        title="Nenhum contato recente encontrado"
+        message="Os últimos contatos cadastrados aparecerão aqui."
+      ></app-empty-state>
+    </ng-template>
+  </div>
+</div>

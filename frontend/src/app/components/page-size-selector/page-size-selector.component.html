@@ -1,0 +1,13 @@
+<div class="d-flex align-items-center">
+  <label for="pageSize" class="me-2 mb-0">Itens por página:</label>
+  <select
+    id="pageSize"
+    class="form-select w-auto"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="onChange($event)"
+  >
+    <option *ngFor="let size of options" [value]="size">
+      {{ size }}
+    </option>
+  </select>
+</div>

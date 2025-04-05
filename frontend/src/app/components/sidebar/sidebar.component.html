@@ -1,0 +1,95 @@
+<div
+  class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark transition h-100"
+  [ngClass]="{ 'collapsed-sidebar': isCollapsed }"
+  style="width: 280px; height: 100vh"
+>
+  <div
+    class="d-flex justify-content-center align-items-center mb-3"
+    [ngClass]="{ 'flex-column-reverse': isCollapsed, mt: 0 }"
+  >
+    <a
+      routerLink="home"
+      class="text-white text-decoration-none justify-content-center"
+    >
+      <i class="bi bi-person-circle fs-4"></i>
+      <span *ngIf="!isCollapsed" class="fs-4"> ContactManager </span>
+    </a>
+    <button
+      class="btn btn-sm d-flex align-items-center btn-outline-light border-0 bg-transparent hover-text-success toggle-icon mt-3"
+      (click)="toggleSidebar()"
+      aria-label="Toggle sidebar"
+    >
+      <i
+        class="bi fs-5 toggle-icon"
+        [ngClass]="
+          isCollapsed ? 'bi-arrow-right-square' : 'bi-arrow-left-square'
+        "
+      ></i>
+    </button>
+  </div>
+
+  <hr />
+
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li>
+      <a
+        routerLink="/dashboard/home"
+        routerLinkActive="active"
+        class="nav-link text-white d-flex align-items-center"
+      >
+        <i class="bi bi-house-door me-2"></i>
+        <span *ngIf="!isCollapsed">Início</span>
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/dashboard/contacts"
+        routerLinkActive="active"
+        class="nav-link text-white d-flex align-items-center"
+      >
+        <i class="bi bi-person-lines-fill me-2"></i>
+        <span *ngIf="!isCollapsed">Contatos</span>
+      </a>
+    </li>
+  </ul>
+
+  <hr />
+
+  <div class="dropdown text-center">
+    <a
+      href="#"
+      class="d-flex align-items-center justify-content-center text-white text-decoration-none dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <img
+        src="https://github.com/mdo.png"
+        alt="user"
+        width="32"
+        height="32"
+        class="rounded-circle"
+      />
+      <strong *ngIf="!isCollapsed" class="ms-2">Usuário</strong>
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+      <li>
+        <a
+          class="dropdown-item d-flex align-items-center gap-2"
+          href="/dashboard/profile"
+        >
+          <i class="bi bi-person-circle"></i> Perfil
+        </a>
+      </li>
+      <li><hr class="dropdown-divider" /></li>
+      <li>
+        <a
+          class="dropdown-item d-flex align-items-center gap-2 text-danger"
+          (click)="logout()"
+        >
+          <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

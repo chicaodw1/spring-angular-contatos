@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-center mt-5">
+  <div
+    class="card shadow-sm w-100 w-sm-75 w-md-50 w-lg-40"
+    style="max-width: 600px"
+  >
+    <div class="card-header bg-success text-white text-center">
+      <h5 class="mb-0">Perfil do Usuário</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="text-center mb-4">
+        <img
+          [src]="previewUrl || 'https://placehold.co/400'"
+          class="rounded-circle img-thumbnail"
+          alt="Foto do perfil"
+          width="150"
+          height="150"
+        />
+        <div class="mt-2">
+          <input
+            type="file"
+            accept="image/*"
+            class="form-control form-control-sm w-auto mx-auto"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+      </div>
+
+      <form (ngSubmit)="salvar()" #form="ngForm">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nome"
+            [(ngModel)]="perfil.nome"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [value]="perfil.email"
+            readonly
+          />
+        </div>
+
+        <div class="text-end">
+          <button
+            class="btn btn-success"
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            Salvar alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

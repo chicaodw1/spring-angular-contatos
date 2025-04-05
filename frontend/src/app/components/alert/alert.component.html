@@ -1,0 +1,15 @@
+<div
+  *ngIf="mensagem"
+  class="alert alert-{{ tipo }} d-flex align-items-center"
+  role="alert"
+>
+  <i
+    class="bi"
+    [ngClass]="{
+      'bi-exclamation-triangle-fill': tipo === 'danger',
+      'bi-check-circle-fill': tipo === 'success',
+    }"
+    class="me-2"
+  ></i>
+  {{ mensagem }}
+</div>

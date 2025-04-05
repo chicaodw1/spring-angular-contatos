@@ -1,0 +1,11 @@
+<button
+  [type]="type"
+  class="btn w-100 d-flex align-items-center justify-content-center gap-2"
+  [ngClass]="btnClass"
+  [disabled]="disabled || loading"
+  (click)="onClick()"
+>
+  <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+  <i *ngIf="!loading && icon" [class]="icon"></i>
+  <span>{{ label }}</span>
+</button>

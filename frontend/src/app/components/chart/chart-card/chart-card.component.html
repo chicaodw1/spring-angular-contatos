@@ -1,0 +1,12 @@
+<div class="card shadow-sm h-100">
+  <div class="card-header">{{ title }}</div>
+  <div class="card-body">
+    <canvas
+      *ngIf="isBrowser"
+      baseChart
+      [data]="data"
+      [options]="options"
+      [type]="type"
+    ></canvas>
+  </div>
+</div>

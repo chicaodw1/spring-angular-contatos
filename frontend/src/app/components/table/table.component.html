@@ -1,0 +1,64 @@
+<div
+  *ngIf="titulo"
+  class="d-flex justify-content-between align-items-center mt-4"
+>
+  <h5 class="mb-0">{{ titulo }}</h5>
+</div>
+<hr />
+<div class="table-responsive pt-2">
+  <table class="table table-hover table-striped shadow-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>Status</th>
+        <th *ngIf="exibirAcoes">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contato of contatos; let i = index">
+        <td>{{ contato.name }}</td>
+        <td>{{ contato.email }}</td>
+        <td>{{ contato.telephone }}</td>
+        <td>
+          <span
+            class="badge text-white fw-semibold px-2 py-1"
+            [ngClass]="{
+              'bg-success': contato.active,
+              'bg-danger': !contato.active,
+            }"
+          >
+            {{ contato.active ? "Ativo" : "Inativo" }}
+          </span>
+        </td>
+        <td *ngIf="exibirAcoes">
+          <button
+            class="btn btn-sm btn-outline-primary me-1"
+            (click)="onEdit(contato, i)"
+          >
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-outline-warning me-1"
+            [class.active]="contato.favorite"
+            (click)="onFavoritar(contato)"
+          >
+            <i
+              class="bi"
+              [ngClass]="
+                contato.favorite ? 'bi-star-fill text-white' : 'bi-star'
+              "
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="onInativar(contato)"
+          >
+            <i class="bi bi-slash-circle"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

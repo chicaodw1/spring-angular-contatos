@@ -1,0 +1,9 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="30" cy="30" r="28" stroke="#4CAF50" stroke-width="4" fill="#E8F5E9"/>
+  <circle cx="30" cy="22" r="6" fill="#4CAF50"/>
+  <path d="M20 40c0-5.5 8-6 10-6s10 0.5 10 6v2H20v-2z" fill="#4CAF50"/>
+
+  <text x="60" y="35" font-family="Segoe UI, sans-serif" font-size="24" fill="#333">
+    <tspan fill="#4CAF50" font-weight="bold">Contact</tspan>
+  </text>
+</svg>

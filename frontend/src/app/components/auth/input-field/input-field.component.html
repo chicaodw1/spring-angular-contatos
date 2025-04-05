@@ -1,0 +1,14 @@
+<div class="form-floating mb-3">
+  <input
+    [type]="type"
+    class="form-control"
+    [id]="name"
+    [placeholder]="placeholder || label"
+    [formControl]="control"
+    [ngClass]="{ 'is-invalid': control.invalid && control.touched }"
+  />
+  <label [for]="name">{{ label }}</label>
+  <div *ngIf="control.invalid && control.touched" class="invalid-feedback">
+    {{ errorMessage }}
+  </div>
+</div>

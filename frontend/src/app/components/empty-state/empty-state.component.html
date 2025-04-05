@@ -1,0 +1,27 @@
+<div
+  *ngIf="mode === 'alert'; else cardTemplate"
+  class="alert alert-{{
+    type
+  }} d-flex align-items-center justify-content-between gap-3 p-4 mt-4 shadow-sm border border-{{
+    type
+  }}-subtle"
+  role="alert"
+>
+  <div class="d-flex align-items-center gap-3">
+    <i class="bi {{ icon }} fs-3 text-{{ type }}"></i>
+    <div>
+      <h5 class="mb-1">{{ title }}</h5>
+      <p class="mb-0">{{ message }}</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #cardTemplate>
+  <div
+    class="d-flex flex-column justify-content-center align-items-center p-4 border rounded bg-light text-center shadow-sm"
+  >
+    <i class="bi {{ icon }} fs-1 text-secondary mb-3"></i>
+    <h5 class="text-secondary">{{ title }}</h5>
+    <p class="text-muted mb-0">{{ message }}</p>
+  </div>
+</ng-template>

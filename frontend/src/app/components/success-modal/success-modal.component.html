@@ -1,0 +1,29 @@
+<div class="modal-backdrop fade show" *ngIf="isOpen"></div>
+
+<div
+  class="modal d-block fade show"
+  tabindex="-1"
+  role="dialog"
+  *ngIf="isOpen"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content shadow border-0">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill fs-4"></i> Sucesso
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="onClose()"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+        <p class="fs-5 mb-0">{{ message }}</p>
+      </div>
+    </div>
+  </div>
+</div>

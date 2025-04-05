@@ -1,0 +1,133 @@
+<div class="modal-backdrop fade show"></div>
+
+<div
+  class="modal d-block fade show"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          {{ modoEdicao ? "Editar Contato" : "Novo Contato" }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="onCancel()"
+          aria-label="Fechar"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <app-alert
+          *ngIf="errorMessage"
+          [mensagem]="errorMessage"
+          [tipo]="'danger'"
+        ></app-alert>
+
+        <form #contatoForm="ngForm" (ngSubmit)="submitForm(contatoForm)">
+          <div class="row g-3">
+            <div class="col-md-6 form-floating">
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                [(ngModel)]="contato.name"
+                required
+                #nome="ngModel"
+                placeholder="Nome"
+              />
+              <label for="name">Nome</label>
+            </div>
+
+            <div class="col-md-6 form-floating">
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="contato.email"
+                required
+                #email="ngModel"
+                placeholder="Email"
+              />
+              <label for="email">Email</label>
+            </div>
+
+            <div class="col-md-6 form-floating">
+              <input
+                type="text"
+                id="cellphone"
+                class="form-control"
+                name="cellphone"
+                [(ngModel)]="contato.cellphone"
+                required
+                placeholder="Celular"
+              />
+              <label for="cellphone">Celular</label>
+            </div>
+
+            <div class="col-md-6 form-floating">
+              <input
+                type="text"
+                id="telephone"
+                class="form-control"
+                name="telephone"
+                [(ngModel)]="contato.telephone"
+                placeholder="Telefone"
+              />
+              <label for="telephone">Telefone</label>
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center gap-2 mt-2">
+              <div class="form-check form-switch">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="favorite"
+                  name="favorite"
+                  [(ngModel)]="contato.favorite"
+                />
+                <label class="form-check-label" for="favorite">Favorito</label>
+              </div>
+            </div>
+
+            <!-- Ativo -->
+            <div class="col-md-6 d-flex align-items-center gap-2 mt-2">
+              <div class="form-check form-switch">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="active"
+                  name="active"
+                  [(ngModel)]="contato.active"
+                />
+                <label class="form-check-label" for="active">Ativo</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer mt-4">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="onCancel()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="contatoForm.invalid"
+            >
+              {{ modoEdicao ? "Atualizar" : "Salvar" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+.nav-link.active {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.collapsed-sidebar {
+    width: 80px !important;
+
+    .nav-link i {
+        font-size: 1.25rem;
+    }
+
+    .nav-link span {
+        display: none !important;
+    }
+}
+
+.toggle-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.toggle-icon:hover {
+    color: #198754 !important;
+    width: 40px;
+    height: 40px;
+}

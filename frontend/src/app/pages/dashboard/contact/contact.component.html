@@ -1,0 +1,68 @@
+<div class="container mt-4">
+  <app-page-header
+    [titulo]="'Contatos'"
+    [subtitulo]="'Gerencie seus contatos de forma prática'"
+  ></app-page-header>
+
+  <div
+    class="d-flex justify-content-between align-items-center flex-wrap mb-3 gap-3"
+  >
+    <app-button
+      label="Novo contato"
+      icon="bi-person-plus-fill"
+      variant="success"
+      (action)="openModal()"
+    ></app-button>
+
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <app-search
+        [(model)]="searchTerm"
+        placeholder="Buscar contatos..."
+      ></app-search>
+
+      <app-page-size-selector
+        [(pageSize)]="pageSize"
+        [options]="pageSizeOptions"
+        (pageSizeChange)="setPageSize($event)"
+      ></app-page-size-selector>
+    </div>
+  </div>
+
+  <ng-container *ngIf="filteredContacts.length > 0; else noContatos">
+    <app-table
+      [contatos]="paginatedContacts"
+      (editar)="edit($event.contato, $event.index)"
+      (favoritar)="toggleFavorite($event)"
+      (inativar)="inativar($event)"
+    ></app-table>
+
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="goToPage($event)"
+    ></app-pagination>
+  </ng-container>
+  <ng-template #noContatos>
+    <app-empty-state
+      title="Nenhum contato encontrado"
+      message="Você ainda não adicionou nenhum contato."
+      icon="bi-person-x"
+      type="warning"
+    ></app-empty-state>
+  </ng-template>
+
+  <app-success-modal
+    [isOpen]="modalConfirmacaoAberto && !modalAberto"
+    [message]="mensagemConfirmacao"
+    (close)="fecharModalConfirmacao()"
+  ></app-success-modal>
+
+  <app-modal
+    *ngIf="modalAberto"
+    [contato]="novoContato"
+    [modoEdicao]="modoEdicao"
+    [errorMessage]="errorMessage"
+    (salvar)="salvarContato($event)"
+    (fechar)="fecharModal()"
+  ></app-modal>
+</div>

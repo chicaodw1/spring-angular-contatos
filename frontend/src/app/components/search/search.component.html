@@ -1,0 +1,12 @@
+<div class="input-group" style="width: 250px">
+  <span class="input-group-text">
+    <i class="bi bi-search"></i>
+  </span>
+  <input
+    type="text"
+    class="form-control"
+    [placeholder]="placeholder"
+    [ngModel]="model"
+    (ngModelChange)="onInput($event)"
+  />
+</div>

@@ -1,0 +1,31 @@
+<app-default-auth-layout>
+  <app-auth-title title="Confirmar Conta" />
+
+  <app-alert *ngIf="mensagemErro" [mensagem]="mensagemErro" tipo="danger" />
+  <app-alert
+    *ngIf="mensagemSucesso"
+    [mensagem]="mensagemSucesso"
+    tipo="success"
+  />
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <app-input-field
+      label="Código de verificação"
+      name="codigo"
+      type="text"
+      [control]="form.controls.codigo"
+      errorMessage="Código obrigatório"
+    />
+
+    <div class="d-grid gap-2 mt-3">
+      <app-button label="Confirmar Conta" variant="success" type="submit" />
+    </div>
+  </form>
+
+  <div class="mt-2 text-center">
+    <p>
+      Já confirmou?
+      <a routerLink="/login" class="link-offset-1">Fazer login</a>
+    </p>
+  </div>
+</app-default-auth-layout>

@@ -1,10 +1,10 @@
-package com.contactList.backend;
+package com.contactList.contactManager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class ContactMangerApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -4,6 +4,8 @@
 name: Deploy to Firebase Hosting on merge
 on:
   push:
+    paths:
+      - "frontend/**"
     branches:
       - main
 jobs:
@@ -11,7 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm run build
+
+      - name: Create environment.prod.ts
+        working-directory: frontend
+        run: |
+          mkdir -p src/environments
+          echo "export const environment = {" > src/environments/environment.prod.ts
+          echo "  production: true," >> src/environments/environment.prod.ts
+          echo "  userPoolId: '${{ secrets.COGNITO_USER_POOL_ID }}'," >> src/environments/environment.prod.ts
+          echo "  userPoolClientId: '${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}'," >> src/environments/environment.prod.ts
+          echo "  identityPoolId: '${{ secrets.COGNITO_IDENTITY_POOL_ID }}'" >> src/environments/environment.prod.ts
+          echo "};" >> src/environments/environment.prod.ts
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build Angular app
+        working-directory: frontend
+        run: npm run build -- --configuration production
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

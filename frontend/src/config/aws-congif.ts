@@ -1,5 +1,5 @@
 import { ResourcesConfig } from 'aws-amplify';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.example';
 
 const awsconfig: ResourcesConfig = {
   Auth: {

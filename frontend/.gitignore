@@ -8,8 +8,8 @@
 .prettierignore
 .DS_Store
 
-.environment.ts
-src/environment/.environment.ts
+# .environment.ts
+# src/environment/.environment.ts
 
 
 # Node

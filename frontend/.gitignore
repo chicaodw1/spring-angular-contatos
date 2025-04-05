@@ -9,6 +9,8 @@
 .DS_Store
 
 .environment.ts
+src/environment/.environment.ts
+
 
 # Node
 /node_modules

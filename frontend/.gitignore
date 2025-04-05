@@ -8,6 +8,8 @@
 .prettierignore
 .DS_Store
 
+.environment.ts
+
 # Node
 /node_modules
 npm-debug.log

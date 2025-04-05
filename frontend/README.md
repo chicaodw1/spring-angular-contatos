@@ -1,59 +1,148 @@
-# Frontend
+# 🌐 Documentação Frontend - Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+## 🔧 Tecnologias e Ferramentas
 
-## Development server
+- Angular 17+
+- Bootstrap para layout responsivo
+- Angular Router
+- Guards de rota para proteger páginas privadas
+- HttpClient para consumo das APIs REST
 
-To start a local development server, run:
+---
+
+## 📂 Estrutura de Pastas
+
+```
+src/
+├── app/
+│   ├── components/
+│   ├── guards/
+│   ├── interceptore/
+│   ├── models/
+│   ├── pages/
+│   ├── services/
+│   └── app-routes.ts
+└── environments/
+└── styles/
+```
+
+---
+
+## 🔐 Autenticação
+
+- Autenticação com Cognito
+- Uso de token JWT armazenado no localStorage
+- Guardas de rota para proteger páginas autenticadas
+
+---
+
+## 📋 Funcionalidades
+
+- **Cadastro de Contatos:** formulário com validação para celular único
+- **Consulta de Contatos:** listagem com filtros e busca por nome/celular
+- **Edição/Inativação:** alteração de dados e marcação como inativo
+- **Favoritos:** botão de marcar/desmarcar contato como favorito
+- **Responsividade:** layout adaptável
+
+---
+
+## 🧪 Testes
+
+- Criados com Jasmine + Karma
+- Testes básicos para componentes, serviços e pipes
+
+---
+
+## 🔐 Segurança
+
+- `.gitignore` configurado para ignorar `environment.ts`
+- `environment.ts` exemplo:
+
+```ts
+export const environment = {
+  production: false,
+  userPoolId: "...",
+  userPoolClientId: "...",
+  identityPoolId: "...",
+};
+```
+
+## ▶️ Como Rodar o Projeto
+
+### ✅ Pré-requisitos
+
+- Node.js 18+
+- Angular CLI (`npm install -g @angular/cli`)
+- Git
+- Editor de código (VSCode recomendado)
+
+### 🚀 Passos para execução local
+
+1. **Clone o repositório:**
+
+```bash
+git clone git@github.com:chicaodw1/spring-angular-contatos.git
+cd spring-angular-contatos/frontend
+```
+
+2. **Instale as dependências:**
+
+```bash
+npm install
+```
+
+3. **Configure o ambiente:**
+
+Crie o arquivo `src/environments/environment.ts` com o seguinte conteúdo (substitua os valores reais):
+
+```ts
+export const environment = {
+  production: false,
+  userPoolId: "seu-user-pool-id",
+  userPoolClientId: "seu-client-id",
+  identityPoolId: "seu-identity-pool-id",
+};
+```
+
+> ⚠️ Esse arquivo está no `.gitignore` e não será versionado.
+
+4. **Rode o servidor de desenvolvimento:**
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+5. **Acesse o app:**
 
-## Code scaffolding
+Abra [http://localhost:4200](http://localhost:4200) no navegador.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🧪 Como Rodar os Testes
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+O projeto utiliza **Jasmine** e **Karma** para realizar os testes unitários.
 
-```bash
-ng generate --help
-```
+### ✅ Pré-requisitos
 
-## Building
+- Ter as dependências instaladas com `npm install`
+- Angular CLI instalado globalmente (`@angular/cli`)
 
-To build the project run:
+### ▶️ Executando os testes
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+No terminal, dentro da pasta `frontend`, execute:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## 📦 Estrutura esperada dos testes
 
-For end-to-end (e2e) testing, run:
+- Os testes ficam nos mesmos diretórios dos componentes, serviços ou pipes testados.
 
-```bash
-ng e2e
-```
+- O nome dos arquivos de teste seguem o padrão: \*.spec.ts
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🧪 Tipos de testes incluídos
 
-## Additional Resources
+- Componentes: Testam a renderização e eventos dos componentes visuais.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Serviços: Validam chamadas HTTP e lógica de negócio.

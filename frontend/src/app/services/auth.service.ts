@@ -15,6 +15,10 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
+  private cachedUserInfo: {
+    attributes: Awaited<ReturnType<typeof fetchUserAttributes>>;
+  } | null = null;
+
   async login(username: string, password: string) {
     try {
       await signOut();
@@ -147,18 +151,39 @@ export class AuthService {
   }
 
   async getUserInfo() {
+    if (this.cachedUserInfo) {
+      return this.cachedUserInfo;
+    }
     try {
       const attributes = await fetchUserAttributes();
-      return {
-        attributes,
-      };
+      this.cachedUserInfo = { attributes };
+      return this.cachedUserInfo;
     } catch (error) {
       console.error('Erro ao buscar atributos do usuário:', error);
       throw error;
     }
   }
 
+  isTokenValid(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const now = Math.floor(Date.now() / 1000);
+
+      return payload.exp && payload.exp > now;
+    } catch (error) {
+      console.error('Erro ao decodificar token:', error);
+      return false;
+    }
+  }
+
   async getSession() {
     return fetchAuthSession();
+  }
+
+  clearUserInfoCache() {
+    this.cachedUserInfo = null;
   }
 }

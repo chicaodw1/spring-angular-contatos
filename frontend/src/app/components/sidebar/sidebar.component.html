@@ -63,13 +63,13 @@
       aria-expanded="false"
     >
       <img
-        src="https://github.com/mdo.png"
+        [src]="userPicture"
         alt="user"
         width="32"
         height="32"
         class="rounded-circle"
       />
-      <strong *ngIf="!isCollapsed" class="ms-2">Usuário</strong>
+      <strong *ngIf="!isCollapsed" class="ms-2">{{ userName }}</strong>
     </a>
 
     <ul class="dropdown-menu dropdown-menu-dark text-small shadow">

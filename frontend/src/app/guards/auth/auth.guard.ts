@@ -8,12 +8,28 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
-  if (!isAuthenticated) {
+  if (!token) {
     router.navigate(['/login']);
     return false;
   }
 
-  return true;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const now = Math.floor(Date.now() / 1000);
+
+    if (!payload.exp || payload.exp < now) {
+      localStorage.removeItem('token');
+      router.navigate(['/login']);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Erro ao verificar o token:', error);
+    localStorage.removeItem('token');
+    router.navigate(['/login']);
+    return false;
+  }
 };

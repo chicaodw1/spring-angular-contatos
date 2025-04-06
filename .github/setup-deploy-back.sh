@@ -1,10 +1,16 @@
 #!/bin/bash
 
-CHAVE_NAME="id_rsa_deploy_20250405040610"
+CHAVE_NAME="id_rsa_deploy_$(date +%Y%m%d%H%M%S)"
 KEY_PATH="$HOME/.ssh/$CHAVE_NAME"
 EC2_USER="ec2-user"
-EC2_HOST="SEU_PUBLIC_DNS_AQUI" # ex: ec2-3-93-22-10.compute-1.amazonaws.com
+EC2_HOST="ec2-52-91-102-151.compute-1.amazonaws.com"
 REPO_PATH="/home/ec2-user/spring-angular-contatos"
+
+# === Verifica se a chave já existe ===
+if [ -f "$KEY_PATH" ]; then
+  echo "⚠️ Já existe uma chave com esse nome: $KEY_PATH"
+  exit 1
+fi
 
 # === Gera chave SSH ===
 ssh-keygen -t rsa -b 4096 -f $KEY_PATH -N ""

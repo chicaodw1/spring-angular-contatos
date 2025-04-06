@@ -14,7 +14,7 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Copia arquivos para EC2 e reinicia app
+      - name: Copia arquivos para EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -30,7 +30,23 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            export DB_URL="${{ secrets.DB_URL }}"
+            export DB_USERNAME="${{ secrets.DB_USERNAME }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}"
+            export COGNITO_REGION="${{ secrets.COGNITO_REGION }}"
+            export COGNITO_USER_POOL="${{ secrets.COGNITO_USER_POOL }}"
+            export COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}"
+
             cd spring-angular-contatos/backend
+            chmod +x mvnw
             ./mvnw clean install
+
+            echo "🔍 Procurando JAR..."
+            JAR_NAME=$(ls target/*.jar | head -n 1)
+
+            echo "🛑 Matando app antigo..."
             pkill -f 'java' || true
-            nohup java -jar target/*.jar > app.log 2>&1 &
+
+            echo "🚀 Subindo app com variáveis de ambiente..."
+            nohup java -jar $JAR_NAME > app.log 2>&1 &

@@ -14,6 +14,9 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Limpa target local
+        run: rm -rf backend/target
+
       - name: Copia arquivos para EC2
         uses: appleboy/scp-action@master
         with:
@@ -31,6 +34,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd spring-angular-contatos/backend
+
+            echo "🧹 Limpando arquivos antigos..."
+            rm -rf target/
+            
             chmod +x mvnw
 
             echo "💡 Exportando variáveis de ambiente..."
@@ -53,4 +60,3 @@ jobs:
 
             echo "🚀 Subindo app..."
             nohup java -jar $JAR_NAME > app.log 2>&1 &
-

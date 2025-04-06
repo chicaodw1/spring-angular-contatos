@@ -70,3 +70,6 @@ jobs:
 
             echo "🚀 Subindo app..."
             nohup java -jar $JAR_NAME > app.log 2>&1 &
+
+            echo "✅ Aplicação iniciada com sucesso!"
+            exit 0

@@ -1,3 +1,86 @@
+# name: Deploy Backend to EC2
+
+# on:
+#   push:
+#     tags:
+#       - "back-v*"
+
+# jobs:
+#   deploy:
+#     name: Deploy to EC2
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout código
+#         uses: actions/checkout@v4
+
+#       - name: Limpa target local
+#         run: rm -rf backend/target
+
+#       - name: Limpa projeto antigo no EC2
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ec2-user
+#           key: ${{ secrets.EC2_SSH_KEY }}
+#           script: |
+#             echo "🧹 Limpando projeto antigo no EC2..."
+#             rm -rf spring-angular-contatos/backend/*
+
+#       - name: Copia arquivos para EC2
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ec2-user
+#           key: ${{ secrets.EC2_SSH_KEY }}
+#           source: "backend"
+#           target: "~/spring-angular-contatos"
+
+#       - name: SSH e build
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ec2-user
+#           key: ${{ secrets.EC2_SSH_KEY }}
+#           script: |
+#             cd spring-angular-contatos/backend
+
+#             echo "🧹 Limpando arquivos antigos..."
+#             rm -rf target/
+
+#             chmod +x mvnw
+
+#             echo "💡 Exportando variáveis de ambiente..."
+#             export DB_URL="${{ secrets.DB_URL }}"
+#             export DB_USERNAME="${{ secrets.DB_USERNAME }}"
+#             export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+#             export COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}"
+#             export COGNITO_REGION="${{ secrets.COGNITO_REGION }}"
+#             export COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}"
+#             export COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}"
+
+#             echo "🛠️ Buildando projeto..."
+#             ./mvnw clean install || { echo "❌ Build falhou!"; exit 1; }
+
+#             echo "🔍 Procurando JAR..."
+#             JAR_NAME=$(ls target/*.jar | head -n 1)
+
+#             echo "🛑 Matando app antigo..."
+#             pkill -f 'java' && echo "Aplicação antiga encerrada." || echo "Nenhuma aplicação em execução."
+
+#             echo "🚀 Subindo app com variáveis de ambiente..."
+#             nohup env \
+#               DB_URL="${{ secrets.DB_URL }}" \
+#               DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+#               DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+#               COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}" \
+#               COGNITO_REGION="${{ secrets.COGNITO_REGION }}" \
+#               COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}" \
+#               COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}" \
+#               java -jar $JAR_NAME > app.log 2>&1 &
+
+#             echo "✅ Aplicação iniciada com sucesso!"
+#             exit 0
 name: Deploy Backend to EC2
 
 on:
@@ -7,77 +90,59 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
+    name: Build and Deploy to EC2
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Limpa target local
-        run: rm -rf backend/target
-
-      - name: Limpa projeto antigo no EC2
-        uses: appleboy/ssh-action@master
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "🧹 Limpando projeto antigo no EC2..."
-            rm -rf spring-angular-contatos/backend/*
+          java-version: '17'
+          distribution: 'temurin'
 
-      - name: Copia arquivos para EC2
+      - name: Build do backend
+        run: |
+          cd backend
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Copia o JAR para EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "backend"
+          source: "backend/target/backend-0.0.1-SNAPSHOT.jar"
           target: "~/spring-angular-contatos"
 
-      - name: SSH e build
+      - name: Atualiza .env e sobe a aplicação
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd spring-angular-contatos/backend
+            cd ~/spring-angular-contatos
 
-            echo "🧹 Limpando arquivos antigos..."
-            rm -rf target/
+            echo "🔒 Atualizando variáveis de ambiente..."
+            cat <<EOF > .env
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
+            COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+            COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+            COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+            EOF
 
-            chmod +x mvnw
+            echo "🛑 Encerrando aplicação antiga se existir..."
+            pkill -f 'backend-0.0.1-SNAPSHOT.jar' || echo "Nenhuma aplicação antiga em execução"
 
-            echo "💡 Exportando variáveis de ambiente..."
-            export DB_URL="${{ secrets.DB_URL }}"
-            export DB_USERNAME="${{ secrets.DB_USERNAME }}"
-            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}"
-            export COGNITO_REGION="${{ secrets.COGNITO_REGION }}"
-            export COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}"
-            export COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}"
+            echo "🚀 Iniciando aplicação..."
+            nohup bash -c "source .env && java -jar backend-0.0.1-SNAPSHOT.jar" > app.log 2>&1 &
 
-            echo "🛠️ Buildando projeto..."
-            ./mvnw clean install || { echo "❌ Build falhou!"; exit 1; }
+            echo "✅ Aplicação iniciada!"
 
-            echo "🔍 Procurando JAR..."
-            JAR_NAME=$(ls target/*.jar | head -n 1)
-
-            echo "🛑 Matando app antigo..."
-            pkill -f 'java' && echo "Aplicação antiga encerrada." || echo "Nenhuma aplicação em execução."
-
-            echo "🚀 Subindo app com variáveis de ambiente..."
-            nohup env \
-              DB_URL="${{ secrets.DB_URL }}" \
-              DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-              DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}" \
-              COGNITO_REGION="${{ secrets.COGNITO_REGION }}" \
-              COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}" \
-              COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}" \
-              java -jar $JAR_NAME > app.log 2>&1 &
-
-            echo "✅ Aplicação iniciada com sucesso!"
-            exit 0

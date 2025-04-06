@@ -66,7 +66,8 @@ jobs:
             JAR_NAME=$(ls target/*.jar | head -n 1)
 
             echo "🛑 Matando app antigo..."
-            pkill -f 'java' || true
+            pkill -f 'java' && echo "Aplicação antiga encerrada." || echo "Nenhuma aplicação em execução."
+
 
             echo "🚀 Subindo app..."
             nohup java -jar $JAR_NAME > app.log 2>&1 &

@@ -59,6 +59,14 @@ jobs:
             export COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}"
             export COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}"
 
+            echo "🔍 Verificando variáveis exportadas (sem senha)..."
+            echo "DB_URL=$DB_URL"
+            echo "DB_USERNAME=$DB_USERNAME"
+            echo "COGNITO_ISSUER_URI=$COGNITO_ISSUER_URI"
+            echo "COGNITO_REGION=$COGNITO_REGION"
+            echo "COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID"
+            echo "COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID"
+
             echo "🛠️ Buildando projeto..."
             ./mvnw clean install
 

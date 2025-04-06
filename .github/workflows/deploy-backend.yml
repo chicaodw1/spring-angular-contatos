@@ -46,6 +46,6 @@ jobs:
                   DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
                   COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}" \
                   COGNITO_REGION="${{ secrets.COGNITO_REGION }}" \
-                  COGNITO_USER_POOL="${{ secrets.COGNITO_USER_POOL }}" \
+                  COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}" \
                   COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}" \
                   java -jar $JAR_NAME > app.log 2>&1 &

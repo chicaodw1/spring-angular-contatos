@@ -32,6 +32,17 @@ jobs:
           script: |
             cd spring-angular-contatos/backend
             chmod +x mvnw
+
+            echo "💡 Exportando variáveis de ambiente..."
+            export DB_URL="${{ secrets.DB_URL }}"
+            export DB_USERNAME="${{ secrets.DB_USERNAME }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}"
+            export COGNITO_REGION="${{ secrets.COGNITO_REGION }}"
+            export COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}"
+            export COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}"
+
+            echo "🛠️ Buildando projeto..."
             ./mvnw clean install
 
             echo "🔍 Procurando JAR..."
@@ -40,12 +51,6 @@ jobs:
             echo "🛑 Matando app antigo..."
             pkill -f 'java' || true
 
-            echo "🚀 Subindo app com variáveis de ambiente..."
-            nohup DB_URL="${{ secrets.DB_URL }}" \
-                  DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-                  DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-                  COGNITO_ISSUER_URI="${{ secrets.COGNITO_ISSUER_URI }}" \
-                  COGNITO_REGION="${{ secrets.COGNITO_REGION }}" \
-                  COGNITO_USER_POOL_ID="${{ secrets.COGNITO_USER_POOL_ID }}" \
-                  COGNITO_CLIENT_ID="${{ secrets.COGNITO_CLIENT_ID }}" \
-                  java -jar $JAR_NAME > app.log 2>&1 &
+            echo "🚀 Subindo app..."
+            nohup java -jar $JAR_NAME > app.log 2>&1 &
+

@@ -51,7 +51,7 @@ jobs:
               COGNITO_REGION=${{ secrets.COGNITO_REGION }}
               COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
               COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
-            EOF
+              EOF
 
             chmod 600 .env
 

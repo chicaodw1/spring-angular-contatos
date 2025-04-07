@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, shareReplay, tap } from 'rxjs';
 import { Contact } from '../models/contact.model';
 import { Indicadores } from '../models/indicadores.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactService {
-  private readonly API = 'http://52.91.102.151:8080/api/contatos';
+  private API = environment.apiUrl;
 
   private contatosCache: Contact[] | null = null;
   private indicadoresCache$!: Observable<Indicadores>;

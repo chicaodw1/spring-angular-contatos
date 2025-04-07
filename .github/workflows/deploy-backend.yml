@@ -129,14 +129,16 @@ jobs:
 
             echo "🔒 Atualizando variáveis de ambiente..."
             cat <<EOF > .env
-            DB_URL=${{ secrets.DB_URL }}
-            DB_USERNAME=${{ secrets.DB_USERNAME }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
-            COGNITO_REGION=${{ secrets.COGNITO_REGION }}
-            COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
-            COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
-            EOF
+              DB_URL=${{ secrets.DB_URL }}
+              DB_USERNAME=${{ secrets.DB_USERNAME }}
+              DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+              COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
+              COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+              COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+              COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+              EOF
+
+            chmod 600 .env
 
             echo "🛑 Encerrando aplicação antiga se existir..."
             pkill -f 'backend-0.0.1-SNAPSHOT.jar' || echo "Nenhuma aplicação antiga em execução"
@@ -145,4 +147,3 @@ jobs:
             nohup bash -c "source .env && java -jar backend-0.0.1-SNAPSHOT.jar" > app.log 2>&1 &
 
             echo "✅ Aplicação iniciada!"
-

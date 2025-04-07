@@ -150,7 +150,9 @@ jobs:
 
             echo "🔍 Verificando se a aplicação está de pé..."
             sleep 5
-            curl -f http://localhost:8080/actuator/health || {
+            if curl -f http://localhost:8080/actuator/health; then
+              echo "✅ Aplicação está no ar!"
+            else
               echo "❌ A aplicação não respondeu na porta 8080!";
-              exit 1;
-            }
+              exit 1
+            fi

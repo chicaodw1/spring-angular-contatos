@@ -128,15 +128,15 @@ jobs:
             cd ~/spring-angular-contatos
 
             echo "🔒 Atualizando variáveis de ambiente..."
-            cat <<EOF > .env
-              DB_URL=${{ secrets.DB_URL }}
-              DB_USERNAME=${{ secrets.DB_USERNAME }}
-              DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-              COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
-              COGNITO_REGION=${{ secrets.COGNITO_REGION }}
-              COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
-              COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
-              EOF
+cat <<EOF > .env
+DB_URL=${{ secrets.DB_URL }}
+DB_USERNAME=${{ secrets.DB_USERNAME }}
+DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
+COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+EOF
 
             chmod 600 .env
 

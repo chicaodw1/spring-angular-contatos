@@ -141,7 +141,7 @@ jobs:
             chmod 600 .env
 
             echo "🛑 Encerrando aplicação antiga se existir..."
-            pkill -f 'backend-0.0.1-SNAPSHOT.jar' || echo "Nenhuma aplicação antiga em execução"
+            (pkill -f 'backend-0.0.1-SNAPSHOT.jar' && echo "✔️ Aplicação antiga encerrada.") || echo "ℹ️ Nenhuma aplicação antiga rodando."
 
             echo "🚀 Iniciando aplicação..."
             nohup bash -c "source .env && java -jar backend-0.0.1-SNAPSHOT.jar" > app.log 2>&1 &
@@ -149,10 +149,9 @@ jobs:
             echo "✅ Aplicação iniciada!"
 
             echo "🔍 Verificando se a aplicação está de pé..."
+
             sleep 5
-            if curl -f http://localhost:8080/actuator/health; then
-              echo "✅ Aplicação está no ar!"
-            else
+            curl -f http://localhost:8080/actuator/health || {
               echo "❌ A aplicação não respondeu na porta 8080!";
-              exit 1
-            fi
+              exit 1;
+            }

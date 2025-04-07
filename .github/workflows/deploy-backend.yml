@@ -100,8 +100,8 @@ jobs:
       - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
 
       - name: Build do backend
         run: |
@@ -147,3 +147,10 @@ jobs:
             nohup bash -c "source .env && java -jar backend-0.0.1-SNAPSHOT.jar" > app.log 2>&1 &
 
             echo "✅ Aplicação iniciada!"
+
+            echo "🔍 Verificando se a aplicação está de pé..."
+            sleep 5
+            curl -f http://localhost:8080/actuator/health || {
+              echo "❌ A aplicação não respondeu na porta 8080!";
+              exit 1;
+            }

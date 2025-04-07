@@ -8,7 +8,7 @@ import { Indicadores } from '../models/indicadores.model';
   providedIn: 'root',
 })
 export class ContactService {
-  private readonly API = 'http://localhost:8080/api/contatos';
+  private readonly API = 'http://52.91.102.151:8080/api/contatos';
 
   private contatosCache: Contact[] | null = null;
   private indicadoresCache$!: Observable<Indicadores>;

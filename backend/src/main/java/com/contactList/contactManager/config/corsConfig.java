@@ -15,7 +15,8 @@ public class corsConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200", "https://contactmanger-2cc61.web.app")
+                        .allowedOrigins("http://localhost:4200", "https://contactmanger-2cc61.web.app",
+                                " https://franciscocosta.dev.br")
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);

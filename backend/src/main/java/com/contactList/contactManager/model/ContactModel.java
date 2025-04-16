@@ -16,27 +16,28 @@ import lombok.Data;
 @Entity
 @Table(name = "contato", schema = "desafio")
 public class ContactModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contato_id")
     private Long id;
 
-    @Column(name = "contato_nome")
+    @Column(name = "contato_nome", length = 100)
     private String name;
 
-    @Column(name = "contato_email")
+    @Column(name = "contato_email", length = 255)
     private String email;
 
-    @Column(name = "contato_celular", unique = true, nullable = false)
+    @Column(name = "contato_celular", length = 11, unique = true, nullable = false)
     private String cellphone;
 
-    @Column(name = "contato_telefone")
+    @Column(name = "contato_telefone", length = 10)
     private String telephone;
 
-    @Column(name = "contato_sn_favorito")
+    @Column(name = "contato_sn_favorito", length = 1)
     private String favoriteChar;
 
-    @Column(name = "contato_sn_ativo")
+    @Column(name = "contato_sn_ativo", length = 1)
     private String activeChar;
 
     @Column(name = "contato_dh_cad", updatable = false)

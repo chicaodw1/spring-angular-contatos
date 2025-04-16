@@ -2,14 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactComponent } from './contact.component';
 import { ContactService } from '../../../services/contact.service';
 import { of } from 'rxjs';
-import { Contact } from '../../../models/contact.model';
+import { ContactModel } from '../../../models/contact.model';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
   let mockContactService: jasmine.SpyObj<ContactService>;
 
-  const mockContacts: Contact[] = [
+  const mockContacts: ContactModel[] = [
     {
       id: 1,
       name: 'João',

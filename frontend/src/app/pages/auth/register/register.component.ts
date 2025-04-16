@@ -14,6 +14,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { AlertComponent } from '../../../components/alert/alert.component';
 import { CommonModule } from '@angular/common';
+import { PasswordChecklistComponent } from '../../../components/auth/password-checklist/password-checklist.component';
 
 @Component({
   selector: 'app-register',
@@ -26,6 +27,7 @@ import { CommonModule } from '@angular/common';
     InputFieldComponent,
     ButtonComponent,
     AlertComponent,
+    PasswordChecklistComponent,
   ],
   templateUrl: './register.component.html',
 })
@@ -79,5 +81,16 @@ export class RegisterComponent {
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  senhaValida(): boolean {
+    const senha = this.form.controls.senha.value;
+    return (
+      senha.length >= 6 &&
+      /[A-Z]/.test(senha) &&
+      /[a-z]/.test(senha) &&
+      /[0-9]/.test(senha) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(senha)
+    );
   }
 }

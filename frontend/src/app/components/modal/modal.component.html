@@ -51,10 +51,15 @@
                 name="email"
                 [(ngModel)]="contato.email"
                 required
+                email
                 #email="ngModel"
                 placeholder="Email"
+                [ngClass]="{ 'is-invalid': email.invalid && email.touched }"
               />
               <label for="email">Email</label>
+              <div class="invalid-feedback" *ngIf="email.errors?.['email']">
+                O formato do email é inválido.
+              </div>
             </div>
 
             <div class="col-md-6 form-floating">
@@ -65,9 +70,26 @@
                 name="cellphone"
                 [(ngModel)]="contato.cellphone"
                 required
+                mask="(00) 00000-0000"
                 placeholder="Celular"
+                #cellphone="ngModel"
+                [ngClass]="{
+                  'is-invalid': cellphone.invalid && cellphone.touched,
+                }"
               />
               <label for="cellphone">Celular</label>
+              <div
+                class="invalid-feedback"
+                *ngIf="cellphone.errors?.['required']"
+              >
+                O celular é obrigatório.
+              </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="cellphone.errors?.['pattern']"
+              >
+                O celular deve conter exatamente 11 dígitos.
+              </div>
             </div>
 
             <div class="col-md-6 form-floating">
@@ -77,9 +99,20 @@
                 class="form-control"
                 name="telephone"
                 [(ngModel)]="contato.telephone"
+                mask="(00) 0000-0000"
                 placeholder="Telefone"
+                #telephone="ngModel"
+                [ngClass]="{
+                  'is-invalid': telephone.invalid && telephone.touched,
+                }"
               />
               <label for="telephone">Telefone</label>
+              <div
+                class="invalid-feedback"
+                *ngIf="telephone.errors?.['pattern']"
+              >
+                O telefone deve conter exatamente 10 dígitos.
+              </div>
             </div>
 
             <div class="col-md-6 d-flex align-items-center gap-2 mt-2">

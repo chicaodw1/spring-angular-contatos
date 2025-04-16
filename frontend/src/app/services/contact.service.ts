@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, shareReplay, tap } from 'rxjs';
-import { Contact } from '../models/contact.model';
 import { Indicadores } from '../models/indicadores.model';
 import { environment } from '../../environments/environment';
+import { ContactModel } from '../models/contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,34 +11,34 @@ import { environment } from '../../environments/environment';
 export class ContactService {
   private API = environment.apiUrl;
 
-  private contatosCache: Contact[] | null = null;
+  private contatosCache: ContactModel[] | null = null;
   private indicadoresCache$!: Observable<Indicadores>;
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Contact[]> {
+  getAll(): Observable<ContactModel[]> {
     if (this.contatosCache) {
       return of(this.contatosCache);
     }
 
     return this.http
-      .get<Contact[]>(this.API)
+      .get<ContactModel[]>(this.API)
       .pipe(tap((data) => (this.contatosCache = data)));
   }
 
-  getById(id: number): Observable<Contact> {
-    return this.http.get<Contact>(`${this.API}/${id}`);
+  getById(id: number): Observable<ContactModel> {
+    return this.http.get<ContactModel>(`${this.API}/${id}`);
   }
 
-  create(contact: Contact): Observable<Contact> {
+  create(contact: ContactModel): Observable<ContactModel> {
     return this.http
-      .post<Contact>(this.API, contact)
+      .post<ContactModel>(this.API, contact)
       .pipe(tap(() => this.clearCache()));
   }
 
-  update(id: number, contact: Contact): Observable<Contact> {
+  update(id: number, contact: ContactModel): Observable<ContactModel> {
     return this.http
-      .put<Contact>(`${this.API}/${id}`, contact)
+      .put<ContactModel>(`${this.API}/${id}`, contact)
       .pipe(tap(() => this.clearCache()));
   }
 

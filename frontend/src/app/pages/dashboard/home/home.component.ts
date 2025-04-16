@@ -5,14 +5,14 @@ import { CardIndicatorsComponent } from '../../../components/card-indicators/car
 import { ChartCardComponent } from '../../../components/chart/chart-card/chart-card.component';
 import { ChartType } from 'chart.js';
 import { TableComponent } from '../../../components/table/table.component';
-import { Contact } from '../../../models/contact.model';
 import { Indicadores } from '../../../models/indicadores.model';
 import { ContactService } from '../../../services/contact.service';
 import { CardData } from '../../../models/card-data.models';
 import { ChartDataCustom } from '../../../models/chart-data.model';
 import { HttpClientModule } from '@angular/common/http';
 import { forkJoin, take } from 'rxjs';
-import { EmptyStateComponent } from "../../../components/empty-state/empty-state.component";
+import { EmptyStateComponent } from '../../../components/empty-state/empty-state.component';
+import { ContactModel } from '../../../models/contact.model';
 
 @Component({
   selector: 'app-home',
@@ -24,15 +24,15 @@ import { EmptyStateComponent } from "../../../components/empty-state/empty-state
     CardIndicatorsComponent,
     ChartCardComponent,
     TableComponent,
-    EmptyStateComponent
-],
+    EmptyStateComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
   cards: CardData[] = [];
   charts: ChartDataCustom[] = [];
-  ultimosContatos: Contact[] = [];
+  ultimosContatos: ContactModel[] = [];
   isLoading = true;
 
   constructor(private contactService: ContactService) {}
@@ -122,7 +122,7 @@ export class HomeComponent {
   }
 
   loadUltimosContatos(): void {
-    this.contactService.getAll().subscribe((contatos: Contact[]) => {
+    this.contactService.getAll().subscribe((contatos: ContactModel[]) => {
       this.ultimosContatos = contatos.slice(-3).reverse();
     });
   }

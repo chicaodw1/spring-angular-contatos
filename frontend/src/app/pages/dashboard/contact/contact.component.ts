@@ -8,10 +8,10 @@ import { PageSizeSelectorComponent } from '../../../components/page-size-selecto
 import { PaginationComponent } from '../../../components/pagination/pagination.component';
 import { ModalComponent } from '../../../components/modal/modal.component';
 import { ButtonComponent } from '../../../components/button/button.component';
-import { Contact } from '../../../models/contact.model';
 import { ContactService } from '../../../services/contact.service';
 import { SuccessModalComponent } from '../../../components/success-modal/success-modal.component';
 import { EmptyStateComponent } from '../../../components/empty-state/empty-state.component';
+import { ContactModel } from '../../../models/contact.model';
 
 @Component({
   selector: 'app-contact',
@@ -36,7 +36,7 @@ export class ContactComponent {
   modalConfirmacaoAberto = false;
   mensagemConfirmacao = '';
 
-  contatos: Contact[] = [];
+  contatos: ContactModel[] = [];
   searchTerm = '';
   pageSize = 5;
   pageSizeOptions = [5, 10, 20, 50];
@@ -46,7 +46,7 @@ export class ContactComponent {
   modoEdicao = false;
   indiceEdicao: number | null = null;
 
-  novoContato: Contact = this.getContatoVazio();
+  novoContato: ContactModel = this.getContatoVazio();
 
   constructor(private contactService: ContactService) {}
 
@@ -60,7 +60,7 @@ export class ContactComponent {
     });
   }
 
-  getContatoVazio(): Contact {
+  getContatoVazio(): ContactModel {
     return {
       id: 0,
       name: '',
@@ -73,7 +73,7 @@ export class ContactComponent {
     };
   }
 
-  get filteredContacts(): Contact[] {
+  get filteredContacts(): ContactModel[] {
     return this.contatos.filter(
       (contato) =>
         contato.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -84,7 +84,7 @@ export class ContactComponent {
     );
   }
 
-  get paginatedContacts(): Contact[] {
+  get paginatedContacts(): ContactModel[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredContacts.slice(start, start + this.pageSize);
   }
@@ -100,7 +100,7 @@ export class ContactComponent {
     this.modalAberto = true;
   }
 
-  salvarContato(contato: Contact): void {
+  salvarContato(contato: ContactModel): void {
     if (this.modoEdicao && this.indiceEdicao !== null) {
       this.contactService.update(contato.id, contato).subscribe({
         next: () => {
@@ -135,14 +135,14 @@ export class ContactComponent {
     }
   }
 
-  edit(contato: Contact, index: number): void {
+  edit(contato: ContactModel, index: number): void {
     this.novoContato = { ...contato };
     this.modoEdicao = true;
     this.indiceEdicao = index;
     this.modalAberto = true;
   }
 
-  toggleFavorite(contato: Contact): void {
+  toggleFavorite(contato: ContactModel): void {
     contato.favorite = !contato.favorite;
     this.contactService.update(contato.id, contato).subscribe(() => {
       this.mensagemConfirmacao = 'Contato adicionado a favoritos!';
@@ -152,7 +152,7 @@ export class ContactComponent {
     });
   }
 
-  inativar(contato: Contact): void {
+  inativar(contato: ContactModel): void {
     this.contactService.deactivate(contato.id).subscribe(() => {
       this.mensagemConfirmacao = 'Contato desativado com sucesso!!';
       (this.modalConfirmacaoAberto = true),

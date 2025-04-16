@@ -4,16 +4,20 @@ import { AuthTitleComponent } from '../../../components/auth/auth-title/auth-tit
 import { InputFieldComponent } from '../../../components/auth/input-field/input-field.component';
 import { ButtonComponent } from '../../../components/button/button.component';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { AlertComponent } from '../../../components/alert/alert.component';
 import { CommonModule } from '@angular/common';
+import { PasswordChecklistComponent } from '../../../components/auth/password-checklist/password-checklist.component';
 
 @Component({
   selector: 'app-new-password',
@@ -27,6 +31,7 @@ import { CommonModule } from '@angular/common';
     InputFieldComponent,
     ButtonComponent,
     AlertComponent,
+    PasswordChecklistComponent,
   ],
   templateUrl: './new-password.component.html',
   styleUrl: './new-password.component.css',
@@ -50,20 +55,20 @@ export class NewPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.email = this.route.snapshot.queryParamMap.get('email') || '';
-    this.form = this.fb.group({
-      verificationCode: this.fb.control('', [
-        Validators.required,
-        Validators.minLength(2),
-      ]),
-      newPassword: this.fb.control('', [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      password: this.fb.control('', [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-    });
+    this.form = this.fb.group(
+      {
+        verificationCode: this.fb.control('', [
+          Validators.required,
+          Validators.minLength(2),
+        ]),
+        newPassword: this.fb.control('', [
+          Validators.required,
+          Validators.minLength(6),
+        ]),
+        password: this.fb.control('', [Validators.required]),
+      },
+      { validators: this.passwordsMatchValidator },
+    );
   }
 
   async submit(): Promise<void> {
@@ -96,4 +101,27 @@ export class NewPasswordComponent implements OnInit {
         err?.message || 'Erro ao redefinir senha. Tente novamente.';
     }
   }
+
+  getConfirmPasswordError(): string {
+    const control = this.form.controls.password;
+
+    if (control.touched && this.form.errors?.['passwordsMismatch']) {
+      return 'As senhas não coincidem';
+    }
+
+    if (control.hasError('required')) {
+      return 'Senha obrigatória';
+    }
+
+    return '';
+  }
+
+  passwordsMatchValidator: ValidatorFn = (
+    control: AbstractControl,
+  ): ValidationErrors | null => {
+    const group = control as FormGroup;
+    const password = group.get('newPassword')?.value;
+    const confirmPassword = group.get('password')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
+  };
 }

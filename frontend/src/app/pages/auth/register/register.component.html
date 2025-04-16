@@ -28,8 +28,15 @@
       errorMessage="Senha obrigatória (mínimo 6 caracteres)"
     />
 
+    <app-password-checklist [senha]="form.controls.senha.value" />
+
     <div class="d-grid gap-2">
-      <app-button label="Cadastar" variant="success" type="submit"></app-button>
+      <app-button
+        label="Cadastrar"
+        variant="success"
+        type="submit"
+        [disabled]="!senhaValida() || form.invalid"
+      ></app-button>
     </div>
 
     <div class="mt-2">

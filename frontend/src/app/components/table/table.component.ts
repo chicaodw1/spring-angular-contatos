@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Contact } from '../../models/contact.model';
+import { ContactModel } from '../../models/contact.model';
 
 @Component({
   selector: 'app-table',
@@ -9,7 +9,7 @@ import { Contact } from '../../models/contact.model';
   styleUrl: './table.component.css',
 })
 export class TableComponent {
-  @Input() contatos: Contact[] = [];
+  @Input() contatos: ContactModel[] = [];
 
   @Input() exibirAcoes: boolean = true;
 

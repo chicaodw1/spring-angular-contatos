@@ -17,12 +17,12 @@
           height="150"
         />
         <div class="mt-2">
-          <input
+          <!-- <input
             type="file"
             accept="image/*"
             class="form-control form-control-sm w-auto mx-auto"
             (change)="onFileSelected($event)"
-          />
+          /> -->
         </div>
       </div>
 
@@ -35,6 +35,7 @@
             name="nome"
             [(ngModel)]="perfil.nome"
             required
+            disabled
           />
         </div>
 
@@ -45,9 +46,10 @@
             class="form-control"
             [value]="perfil.email"
             readonly
+            disabled
           />
         </div>
-
+        <!-- 
         <div class="text-end">
           <button
             class="btn btn-success"
@@ -56,7 +58,7 @@
           >
             Salvar alterações
           </button>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>

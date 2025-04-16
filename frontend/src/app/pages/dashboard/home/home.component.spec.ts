@@ -3,7 +3,6 @@ import { HomeComponent } from './home.component';
 import { of } from 'rxjs';
 import { ContactService } from '../../../services/contact.service';
 import { Indicadores } from '../../../models/indicadores.model';
-import { Contact } from '../../../models/contact.model';
 import {
   Chart,
   BarController,
@@ -15,6 +14,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { ContactModel } from '../../../models/contact.model';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -54,7 +54,7 @@ describe('HomeComponent', () => {
       },
     };
 
-    const mockContatos: Contact[] = [
+    const mockContatos: ContactModel[] = [
       {
         id: 1,
         name: 'João',

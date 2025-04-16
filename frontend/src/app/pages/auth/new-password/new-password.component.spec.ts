@@ -15,6 +15,7 @@ import { AuthTitleComponent } from '../../../components/auth/auth-title/auth-tit
 import { InputFieldComponent } from '../../../components/auth/input-field/input-field.component';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { AlertComponent } from '../../../components/alert/alert.component';
+import { PasswordChecklistComponent } from '../../../components/auth/password-checklist/password-checklist.component';
 
 describe('NewPasswordComponent', () => {
   let component: NewPasswordComponent;
@@ -56,6 +57,7 @@ describe('NewPasswordComponent', () => {
             InputFieldComponent,
             ButtonComponent,
             AlertComponent,
+            PasswordChecklistComponent,
           ],
         },
       })
@@ -92,7 +94,9 @@ describe('NewPasswordComponent', () => {
 
     await component.submit();
     tick();
-    expect(component.mensagemErro).toBe('As senhas não coincidem.');
+    fixture.detectChanges();
+
+    expect(component.form.errors?.['passwordsMismatch']).toBeTrue();
     expect(authServiceSpy.confirmNewPassword).not.toHaveBeenCalled();
   }));
 

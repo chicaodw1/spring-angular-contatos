@@ -9,7 +9,7 @@ import { ContactModel } from '../models/contact.model';
   providedIn: 'root',
 })
 export class ContactService {
-  private API = environment.apiUrl;
+  private readonly BASE_API = `${environment.apiUrl}/api/contatos`;
 
   private contatosCache: ContactModel[] | null = null;
   private indicadoresCache$!: Observable<Indicadores>;
@@ -22,36 +22,36 @@ export class ContactService {
     }
 
     return this.http
-      .get<ContactModel[]>(this.API)
+      .get<ContactModel[]>(this.BASE_API)
       .pipe(tap((data) => (this.contatosCache = data)));
   }
 
   getById(id: number): Observable<ContactModel> {
-    return this.http.get<ContactModel>(`${this.API}/${id}`);
+    return this.http.get<ContactModel>(`${this.BASE_API}/${id}`);
   }
 
   create(contact: ContactModel): Observable<ContactModel> {
     return this.http
-      .post<ContactModel>(this.API, contact)
+      .post<ContactModel>(this.BASE_API, contact)
       .pipe(tap(() => this.clearCache()));
   }
 
   update(id: number, contact: ContactModel): Observable<ContactModel> {
     return this.http
-      .put<ContactModel>(`${this.API}/${id}`, contact)
+      .put<ContactModel>(`${this.BASE_API}/${id}`, contact)
       .pipe(tap(() => this.clearCache()));
   }
 
   deactivate(id: number): Observable<void> {
     return this.http
-      .patch<void>(`${this.API}/${id}/deactivate`, {})
+      .patch<void>(`${this.BASE_API}/${id}/deactivate`, {})
       .pipe(tap(() => this.clearCache()));
   }
 
   getIndicadores(): Observable<Indicadores> {
     if (!this.indicadoresCache$) {
       this.indicadoresCache$ = this.http
-        .get<Indicadores>(`${this.API}/indicadores`)
+        .get<Indicadores>(`${this.BASE_API}/indicadores`)
         .pipe(shareReplay(1));
     }
     return this.indicadoresCache$;

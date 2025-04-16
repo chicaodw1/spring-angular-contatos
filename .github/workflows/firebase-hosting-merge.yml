@@ -25,6 +25,10 @@ jobs:
           echo "  apiUrl: '${{ secrets.APIURL }}'" >> src/environments/environment.prod.ts
           echo "};" >> src/environments/environment.prod.ts
 
+      - name: Debug env file
+        working-directory: frontend
+        run: cat src/environments/environment.prod.ts
+
       - name: Install dependencies
         working-directory: frontend
         run: npm install

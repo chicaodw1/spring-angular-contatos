@@ -36,6 +36,9 @@ jobs:
       - name: Build da aplicação Angular
         run: npm run build -- --configuration production
 
+      - name: Verificar se API URL está embutida no build
+        run: grep -i 'apiUrl' dist/frontend/browser/main-*.js || echo "⚠️ apiUrl não encontrada no bundle!"
+
       - name: Deploy para Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

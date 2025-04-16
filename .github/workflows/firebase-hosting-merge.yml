@@ -7,40 +7,29 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Criar arquivo environment.prod.ts
+      - name: Create environment.prod.ts
+        working-directory: frontend
         run: |
           mkdir -p src/environments
-          cat <<EOF > src/environments/environment.prod.ts
-          export const environment = {
-            production: true,
-            userPoolId: '${{ secrets.COGNITO_USER_POOL_ID }}',
-            userPoolClientId: '${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}',
-            identityPoolId: '${{ secrets.COGNITO_IDENTITY_POOL_ID }}',
-            apiUrl: '${{ secrets.APIURL }}'
-          };
-          EOF
+          echo "export const environment = {" > src/environments/environment.prod.ts
+          echo "  production: true," >> src/environments/environment.prod.ts
+          echo "  userPoolId: '${{ secrets.COGNITO_USER_POOL_ID }}'," >> src/environments/environment.prod.ts
+          echo "  userPoolClientId: '${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}'," >> src/environments/environment.prod.ts
+          echo "  identityPoolId: '${{ secrets.COGNITO_IDENTITY_POOL_ID }}'" >> src/environments/environment.prod.ts
+          echo "};" >> src/environments/environment.prod.ts
 
-      - name: Verificar conteúdo do environment.prod.ts
-        run: cat src/environments/environment.prod.ts
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
 
-      - name: Instalar dependências
-        run: npm ci
-
-      - name: Build da aplicação Angular
+      - name: Build Angular app
+        working-directory: frontend
         run: npm run build -- --configuration production
 
-      - name: Verificar se API URL está embutida no build
-        run: grep -i 'apiUrl' dist/frontend/browser/main-*.js || echo "⚠️ apiUrl não encontrada no bundle!"
-
-      - name: Deploy para Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CONTACTMANGER_2CC61 }}

@@ -44,34 +44,34 @@ jobs:
           script: |
             cd ~/spring-angular-contatos/backend
 
-            echo "🔒 Gravando variáveis no .env permanente..."
+            echo "🔒 Gravando .env com variáveis no formato dotenv"
             cat > .env <<EOF
-            export DB_URL=${{ secrets.DB_URL }}
-            export DB_USERNAME=${{ secrets.DB_USERNAME }}
-            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            export COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
-            export COGNITO_REGION=${{ secrets.COGNITO_REGION }}
-            export COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
-            export COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
+            COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+            COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+            COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
             EOF
 
-            echo "✅ Adicionando ao .bash_profile para manter após reboot..."
-            grep -qxF "source ~/spring-angular-contatos/backend/.env" ~/.bash_profile || echo "source ~/spring-angular-contatos/backend/.env" >> ~/.bash_profile
-            source ~/.bash_profile
+            echo "✅ Persistindo no .bash_profile"
+            grep -qxF "export \$(cat ~/spring-angular-contatos/backend/.env | xargs)" ~/.bash_profile || echo "export \$(cat ~/spring-angular-contatos/backend/.env | xargs)" >> ~/.bash_profile
 
-            echo "🛑 Parando aplicação antiga se estiver rodando..."
+            echo "🛑 Encerrando aplicação antiga se estiver rodando"
             pkill -f 'backend-0.0.1-SNAPSHOT.jar' || true
 
-            echo "🚀 Iniciando aplicação com nohup..."
-            nohup java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1 &
+            echo "🚀 Iniciando aplicação com variáveis carregadas"
+            nohup env $(cat .env | xargs) java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1 &
 
-            echo "⌛ Aguardando aplicação iniciar..."
+            echo "⏳ Aguardando subir"
             sleep 10
 
-            echo "🔍 Checando saúde da aplicação..."
+            echo "🔍 Verificando saúde"
             curl -f http://localhost:8080/actuator/health || {
               echo "❌ A aplicação não respondeu na porta 8080!";
               exit 1;
             }
 
-            echo "✅ Aplicação em execução com sucesso!"
+            echo "✅ Aplicação iniciada com sucesso"
+            (crontab -l 2>/dev/null; echo "@reboot cd ~/spring-angular-contatos/backend && nohup env \$(cat .env | xargs) java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1") | crontab -

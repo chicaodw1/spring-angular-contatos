@@ -1,4 +1,5 @@
 name: Deploy Backend to EC2
+
 on:
   push:
     tags:
@@ -32,7 +33,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "backend/target/backend-0.0.1-SNAPSHOT.jar"
-          target: "~/spring-angular-contatos/backend"
+          target: "~/spring-angular-contatos/backend/target"
 
       - name: Sobe a aplicação no EC2
         uses: appleboy/ssh-action@master
@@ -43,24 +44,34 @@ jobs:
           script: |
             cd ~/spring-angular-contatos/backend
 
-            echo "🛑 Encerrando aplicação antiga se existir..."
+            echo "🔒 Gravando variáveis no .env permanente..."
+            cat > .env <<EOF
+            export DB_URL=${{ secrets.DB_URL }}
+            export DB_USERNAME=${{ secrets.DB_USERNAME }}
+            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            export COGNITO_ISSUER_URI=${{ secrets.COGNITO_ISSUER_URI }}
+            export COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+            export COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+            export COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+            EOF
+
+            echo "✅ Adicionando ao .bash_profile para manter após reboot..."
+            grep -qxF "source ~/spring-angular-contatos/backend/.env" ~/.bash_profile || echo "source ~/spring-angular-contatos/backend/.env" >> ~/.bash_profile
+            source ~/.bash_profile
+
+            echo "🛑 Parando aplicação antiga se estiver rodando..."
             pkill -f 'backend-0.0.1-SNAPSHOT.jar' || true
 
-            echo "🚀 Iniciando aplicação com variáveis seguras..."
-            nohup java -jar backend-0.0.1-SNAPSHOT.jar \
-              --spring.profiles.active=prod \
-              --spring.datasource.url="${{ secrets.DB_URL }}" \
-              --spring.datasource.username="${{ secrets.DB_USERNAME }}" \
-              --spring.datasource.password="${{ secrets.DB_PASSWORD }}" \
-              --spring.security.oauth2.resourceserver.jwt.issuer-uri="${{ secrets.COGNITO_ISSUER_URI }}" \
-              --cognito.region="${{ secrets.COGNITO_REGION }}" \
-              --cognito.userPoolId="${{ secrets.COGNITO_USER_POOL_ID }}" \
-              --cognito.clientId="${{ secrets.COGNITO_CLIENT_ID }}" \
-              > ~/app.log 2>&1 &
+            echo "🚀 Iniciando aplicação com nohup..."
+            nohup java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1 &
 
-            echo "🔍 Verificando saúde da aplicação..."
+            echo "⌛ Aguardando aplicação iniciar..."
             sleep 10
+
+            echo "🔍 Checando saúde da aplicação..."
             curl -f http://localhost:8080/actuator/health || {
               echo "❌ A aplicação não respondeu na porta 8080!";
               exit 1;
             }
+
+            echo "✅ Aplicação em execução com sucesso!"

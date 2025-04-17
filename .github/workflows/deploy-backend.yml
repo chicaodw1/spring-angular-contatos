@@ -21,7 +21,7 @@ jobs:
 
       - name: Build do backend
         run: |
-          cd spring-angular-contatos/backend
+          cd backend
           chmod +x mvnw
           ./mvnw clean package -DskipTests
 
@@ -31,7 +31,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "spring-angular-contatos/backend/target/backend-0.0.1-SNAPSHOT.jar"
+          source: "backend/target/backend-0.0.1-SNAPSHOT.jar"
           target: "~/spring-angular-contatos/backend"
 
       - name: Sobe a aplicação no EC2

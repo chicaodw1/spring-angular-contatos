@@ -44,7 +44,7 @@ jobs:
           script: |
             cd ~/spring-angular-contatos/backend
 
-            echo "🔒 Gravando .env com variáveis no formato dotenv"
+            echo "🔒 Gravando variáveis no .env"
             cat > .env <<EOF
             DB_URL=${{ secrets.DB_URL }}
             DB_USERNAME=${{ secrets.DB_USERNAME }}
@@ -55,16 +55,16 @@ jobs:
             COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
             EOF
 
-            echo "✅ Persistindo no .bash_profile"
+            echo "✅ Garantindo persistência das variáveis no .bash_profile"
             grep -qxF "export \$(cat ~/spring-angular-contatos/backend/.env | xargs)" ~/.bash_profile || echo "export \$(cat ~/spring-angular-contatos/backend/.env | xargs)" >> ~/.bash_profile
 
-            echo "🛑 Encerrando aplicação antiga se estiver rodando"
-            pkill -f 'backend-0.0.1-SNAPSHOT.jar' || true
+            echo "🧹 Limpando versão anterior do JAR (se existir)"
+            rm -f ~/spring-angular-contatos/backend/target/backend-0.0.1-SNAPSHOT.jar.old || true
 
             echo "🚀 Iniciando aplicação com variáveis carregadas"
             nohup env $(cat .env | xargs) java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1 &
 
-            echo "⏳ Aguardando subir"
+            echo "⏳ Aguardando iniciar"
             sleep 10
 
             echo "🔍 Verificando saúde"
@@ -73,5 +73,7 @@ jobs:
               exit 1;
             }
 
-            echo "✅ Aplicação iniciada com sucesso"
-            (crontab -l 2>/dev/null; echo "@reboot cd ~/spring-angular-contatos/backend && nohup env \$(cat .env | xargs) java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1") | crontab -
+            echo "✅ Aplicação em execução com sucesso"
+
+            echo "🛠️ Registrando no crontab para iniciar com o sistema"
+            (crontab -l 2>/dev/null; echo "@reboot cd ~/spring-angular-contatos/backend && export \$(cat .env | xargs) && nohup java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > ~/app.log 2>&1") | sort -u | crontab -

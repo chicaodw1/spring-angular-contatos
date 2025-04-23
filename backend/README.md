@@ -27,6 +27,7 @@ src/
 │   └── resources/
 │       ├── application.properties
 │       └── schema.sql
+|── test/
 ```
 
 ---

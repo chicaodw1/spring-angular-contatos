@@ -20,7 +20,6 @@ describe('authInterceptor (functional)', () => {
         provideHttpClient(
           withInterceptors([
             authInterceptor,
-            // ✅ interceptor mock direto, sem função extra
             (
               req: HttpRequest<any>,
               next: HttpHandlerFn,

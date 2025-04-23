@@ -85,7 +85,7 @@ public class ContactControllerTest {
         when(contactService.createContact(any(ContactDTO.class))).thenReturn(contato);
 
         mockMvc.perform(post("/api/contatos")
-                .header("Authorization", "Bearer fake-token") // opcional, se for exigir depois
+                .header("Authorization", "Bearer fake-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contato)))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class ContactControllerTest {
         when(contactService.updateContact(Mockito.eq(1L), any(ContactDTO.class))).thenReturn(contato);
 
         mockMvc.perform(put("/api/contatos/1")
-                .header("Authorization", "Bearer fake-token") // idem
+                .header("Authorization", "Bearer fake-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contato)))
                 .andExpect(status().isOk())
@@ -107,7 +107,7 @@ public class ContactControllerTest {
     @Test
     void deveDesativarContato() throws Exception {
         mockMvc.perform(patch("/api/contatos/1/deactivate")
-                .header("Authorization", "Bearer fake-token")) // idem
+                .header("Authorization", "Bearer fake-token"))
                 .andExpect(status().isNoContent());
 
         verify(contactService).deactivateContact(1L);
